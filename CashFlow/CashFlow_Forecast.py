@@ -47,7 +47,7 @@ def cashflow_forecast():
     closing_bal = inp_df.ix[-1].values
     predicted_days = []
     for i in range(0,len(loan_val)):
-        result = pred[i]-closing_bal[i]
+        result = pred[i]-closing_bal[i]-loan_val[i]
         fin_res = result.clip(min=0)
         
         if not np.any(fin_res>0):
