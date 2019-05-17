@@ -48,15 +48,16 @@ def cashflow_forecast():
     predicted_days = []
     for i in range(0,len(loan_val)):
         result = pred[i]-closing_bal[i]
-
-        idx = (result - loan_val[i]).argmin()
-        if result[idx] < 0:
+        fin_res = result.clip(min=0)
+        
+        if not np.any(fin_res>0):
             print("Money "+str(loan_val[i])+" Number of days 30")
-            predicted_days.append(30)
-        else :
+            predicted_days.append(60)
+        else:
+            idx = np.argmin(fin_res[np.nonzero(fin_res)])
             print("Money "+str(loan_val[i])+" Number of days "+str(idx + 1))
             predicted_days.append(idx.item()+1)
-
+            
     loan = loan_val.tolist()
     output_val = { 'Bank':int(bank_forecast[0].item()),\
                    'Alpha':{'day':predicted_days[0],'money':loan[0]},\
